@@ -176,11 +176,14 @@ void do_block(int lda, int m, int n, int k, double *A, double *B, double *C, int
       copyB(k, B+j*lda, lda, &packedB[j*k]);
     for (i=0; i<m; i+=8){        /* Loop over the rows of C */
       if (j == 0) copyA8(k, A+i, lda, &packedA[i*k]);
+      // for(int p = 0; p < 8*k; p++)
+      // {
+      //   printf("%f ", packedA[p]);
+      //   if (p % k == k - 1) printf("\n");
+      // }
       update8X4(k, &packedA[i*k], 8, &packedB[j*k], k, C+i+j*lda, lda);
     }
   }
-
-
 }
 
 
@@ -191,10 +194,8 @@ void square_dgemm(int n, double* A, double* B, double* C)
   /* This time, we compute a BLOCK_SIZE x n block of C by a call to the do_block */
 
   for (j=0; j<n; j+=BLOCK_SIZE){
-    // Column blocks of A
     pb = min( n-j, BLOCK_SIZE );
     for (i=0; i<n; i+=BLOCK_SIZE){
-      // Row blocks of C
       ib = min(n-i, BLOCK_SIZE);
       do_block(n, ib, n, pb, A+i+j*n, B+j, C+i, i==0);
     }
