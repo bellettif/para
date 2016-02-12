@@ -27,7 +27,7 @@ def test_block_size(filename, block_size):
    inputfile.close()
 
    os.system('make')
-   tmp = os.popen('./benchmark-auto_opt').read()
+   tmp = os.popen('./benchmark-44').read()
 
    return float(re.search('Average percentage of Peak = (\d+.\d+)', tmp).group(1))
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
    #Test many block sizes and report all of their performance
    #performances sorted from best to worst.
    max_block_size = 256
-   results = test_block_range('dgemm-auto_opt.c', max_block_size)
+   results = test_block_range('dgemm-44blocked.c', max_block_size)
    for block_size in sorted(results, key=results.get, reverse=True):
       print(' '.join(['Block Size: ', str(block_size),
                       '\t % Peak: ', str(results[block_size])]))
